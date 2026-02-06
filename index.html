@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nilay App - Flag Quiz Game</title>
+    <title>Nilay Flag App - Flag Quiz Game</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <main class="app">
       <header class="app-header">
-        <h1>Nilay App</h1>
-        <p class="subtitle">Flag Quiz Game • colorful edition</p>
+        <h1>Nilay Flag App</h1>
+        <p class="subtitle">Flag Quiz Game</p>
       </header>
 
       <section id="start-screen" class="card">
@@ -26,6 +26,7 @@
         <div class="quiz-topbar">
           <p id="progress">Question 1 / 20</p>
           <p id="score">Score: 0 / 20</p>
+          <p id="timer">Time: 6</p>
         </div>
 
         <div class="flag-wrap">
@@ -48,19 +49,6 @@
         <button id="restart-btn" type="button">Restart</button>
       </section>
 
-      <section class="card info-card">
-        <h2>Flag Asset Sources</h2>
-        <p>
-          The app first tries local files from <code>assets/flags/</code>. If one
-          is missing, it automatically falls back to CDN-hosted country flags,
-          then to a colorful placeholder so every question always shows an
-          image.
-        </p>
-        <details>
-          <summary>Expected filename → country mapping</summary>
-          <ul id="flag-file-list" class="file-list"></ul>
-        </details>
-      </section>
     </main>
 
     <script src="app.js"></script>

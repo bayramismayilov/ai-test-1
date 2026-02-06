@@ -67,6 +67,14 @@ h1 {
   display: none;
 }
 
+#start-screen {
+  text-align: center;
+}
+
+#start-screen .difficulty-buttons {
+  justify-content: center;
+}
+
 .difficulty-buttons {
   display: flex;
   gap: 0.75rem;
@@ -178,15 +186,6 @@ button:active {
   font-weight: 700;
 }
 
-.info-card {
-  background: rgba(255, 255, 255, 0.78);
-}
-
-.file-list {
-  margin: 0.7rem 0 0;
-  columns: 2;
-  padding-left: 1.2rem;
-}
 
 code {
   background: rgba(90, 103, 255, 0.12);
@@ -204,7 +203,4 @@ code {
     flex-direction: column;
   }
 
-  .file-list {
-    columns: 1;
-  }
 }

@@ -1,4 +1,6 @@
 const QUESTION_COUNT = 20;
+const QUESTION_TIME = 6;
+const AUTO_ADVANCE_DELAY_MS = 1200;
 
 const FLAG_BANK = [
   // Easy (20)
@@ -74,6 +76,9 @@ const state = {
   index: 0,
   score: 0,
   questionStates: [],
+  timeLeft: QUESTION_TIME,
+  timerId: null,
+  autoAdvanceId: null,
 };
 
 const startScreen = document.getElementById("start-screen");
@@ -81,6 +86,7 @@ const quizScreen = document.getElementById("quiz-screen");
 const resultScreen = document.getElementById("result-screen");
 const progressEl = document.getElementById("progress");
 const scoreEl = document.getElementById("score");
+const timerEl = document.getElementById("timer");
 const flagImage = document.getElementById("flag-image");
 const optionsEl = document.getElementById("options");
 const statusMessage = document.getElementById("status-message");
@@ -88,7 +94,6 @@ const showAnswerBtn = document.getElementById("show-answer-btn");
 const nextBtn = document.getElementById("next-btn");
 const finalScore = document.getElementById("final-score");
 const restartBtn = document.getElementById("restart-btn");
-const fileList = document.getElementById("flag-file-list");
 
 document.querySelectorAll(".difficulty-btn").forEach((btn) => {
   btn.addEventListener("click", () => startQuiz(btn.dataset.difficulty));
@@ -96,8 +101,6 @@ document.querySelectorAll(".difficulty-btn").forEach((btn) => {
 showAnswerBtn.addEventListener("click", revealAnswer);
 nextBtn.addEventListener("click", goNext);
 restartBtn.addEventListener("click", resetToStart);
-
-populateFlagFileList();
 
 function startQuiz(difficulty) {
   const pool = FLAG_BANK.filter((item) => item.difficulty === difficulty);
@@ -118,12 +121,17 @@ function startQuiz(difficulty) {
     locked: false,
     revealed: false,
     isCorrect: false,
+    timedOut: false,
+    status: "",
   }));
 
   startScreen.classList.add("hidden");
   resultScreen.classList.add("hidden");
   quizScreen.classList.remove("hidden");
+  state.timeLeft = QUESTION_TIME;
+  clearTimers();
   renderQuestion();
+  startTimer();
 }
 
 function buildOptions(question, pool) {
@@ -137,7 +145,8 @@ function renderQuestion() {
 
   progressEl.textContent = `Question ${state.index + 1} / ${QUESTION_COUNT}`;
   scoreEl.textContent = `Score: ${state.score} / ${QUESTION_COUNT}`;
-  statusMessage.textContent = "";
+  timerEl.textContent = `Time: ${state.timeLeft}`;
+  statusMessage.textContent = qState.status || "";
 
   flagImage.alt = `Flag of ${question.country}`;
   loadFlagImage(question);
@@ -178,6 +187,9 @@ function chooseOption(option) {
   qState.selected = option;
   qState.locked = true;
   qState.isCorrect = option === question.country;
+  qState.status = qState.isCorrect ? "Correct!" : "Incorrect.";
+
+  clearQuestionTimer();
 
   if (qState.isCorrect) {
     state.score += 1;
@@ -192,9 +204,9 @@ function revealAnswer() {
 
   qState.revealed = true;
   qState.locked = true;
-  statusMessage.textContent = "Answer revealed for this question.";
+  qState.status = "Answer revealed for this question.";
+  clearQuestionTimer();
   renderQuestion();
-  statusMessage.textContent = "Answer revealed for this question.";
 }
 
 function goNext() {
@@ -210,13 +222,17 @@ function goNext() {
   }
 
   state.index += 1;
+  state.timeLeft = QUESTION_TIME;
+  clearTimers();
   renderQuestion();
+  startTimer();
 }
 
 function showResults() {
   quizScreen.classList.add("hidden");
   resultScreen.classList.remove("hidden");
-  finalScore.textContent = `You got ${state.score}/${QUESTION_COUNT}`;
+  clearTimers();
+  finalScore.textContent = `Congrats! You got ${state.score}/${QUESTION_COUNT}. Uncle Bayram is proud of you!`;
 }
 
 function resetToStart() {
@@ -225,9 +241,67 @@ function resetToStart() {
   state.index = 0;
   state.score = 0;
   state.questionStates = [];
+  state.timeLeft = QUESTION_TIME;
+  clearTimers();
+  timerEl.textContent = `Time: ${QUESTION_TIME}`;
   quizScreen.classList.add("hidden");
   resultScreen.classList.add("hidden");
   startScreen.classList.remove("hidden");
+}
+
+
+function startTimer() {
+  clearQuestionTimer();
+  state.timerId = setInterval(() => {
+    const qState = state.questionStates[state.index];
+    if (!qState || qState.locked) {
+      clearQuestionTimer();
+      return;
+    }
+
+    state.timeLeft = Math.max(0, state.timeLeft - 1);
+    timerEl.textContent = `Time: ${state.timeLeft}`;
+
+    if (state.timeLeft === 0) {
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+function handleTimeout() {
+  const qState = state.questionStates[state.index];
+  if (!qState || qState.locked) return;
+
+  qState.locked = true;
+  qState.isCorrect = false;
+  qState.timedOut = true;
+  qState.status = "Time is up!";
+  clearQuestionTimer();
+  renderQuestion();
+
+  clearAutoAdvance();
+  state.autoAdvanceId = setTimeout(() => {
+    goNext();
+  }, AUTO_ADVANCE_DELAY_MS);
+}
+
+function clearQuestionTimer() {
+  if (state.timerId) {
+    clearInterval(state.timerId);
+    state.timerId = null;
+  }
+}
+
+function clearAutoAdvance() {
+  if (state.autoAdvanceId) {
+    clearTimeout(state.autoAdvanceId);
+    state.autoAdvanceId = null;
+  }
+}
+
+function clearTimers() {
+  clearQuestionTimer();
+  clearAutoAdvance();
 }
 
 function loadFlagImage(question) {
@@ -402,13 +476,4 @@ function createPlaceholder(country) {
     <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48' fill='white' font-family='Arial, sans-serif'>${country}</text>
   </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
-
-function populateFlagFileList() {
-  const unique = [...FLAG_BANK].sort((a, b) => a.slug.localeCompare(b.slug));
-  unique.forEach((entry) => {
-    const li = document.createElement("li");
-    li.textContent = `${entry.slug}.png -> ${entry.country}`;
-    fileList.appendChild(li);
-  });
 }
