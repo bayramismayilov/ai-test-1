@@ -140,10 +140,7 @@ function renderQuestion() {
   statusMessage.textContent = "";
 
   flagImage.alt = `Flag of ${question.country}`;
-  flagImage.src = `assets/flags/${question.slug}.png`;
-  flagImage.onerror = () => {
-    flagImage.src = createPlaceholder(question.country);
-  };
+  loadFlagImage(question);
 
   optionsEl.innerHTML = "";
   question.options.forEach((option) => {
@@ -231,6 +228,153 @@ function resetToStart() {
   quizScreen.classList.add("hidden");
   resultScreen.classList.add("hidden");
   startScreen.classList.remove("hidden");
+}
+
+function loadFlagImage(question) {
+  const sources = [
+    `assets/flags/${question.slug}.png`,
+    `https://flagcdn.com/w640/${getIsoCode(question.slug)}.png`,
+  ];
+
+  let sourceIndex = 0;
+  flagImage.src = sources[sourceIndex];
+  flagImage.onerror = () => {
+    sourceIndex += 1;
+    if (sourceIndex < sources.length && !sources[sourceIndex].includes("undefined")) {
+      flagImage.src = sources[sourceIndex];
+      return;
+    }
+    flagImage.onerror = null;
+    flagImage.src = createPlaceholder(question.country);
+  };
+}
+
+function getIsoCode(slug) {
+  const isoBySlug = {
+    "united-states": "us",
+    canada: "ca",
+    "united-kingdom": "gb",
+    france: "fr",
+    germany: "de",
+    italy: "it",
+    spain: "es",
+    portugal: "pt",
+    brazil: "br",
+    argentina: "ar",
+    mexico: "mx",
+    japan: "jp",
+    china: "cn",
+    india: "in",
+    australia: "au",
+    "new-zealand": "nz",
+    russia: "ru",
+    "south-africa": "za",
+    egypt: "eg",
+    nigeria: "ng",
+    sweden: "se",
+    norway: "no",
+    finland: "fi",
+    denmark: "dk",
+    netherlands: "nl",
+    belgium: "be",
+    switzerland: "ch",
+    austria: "at",
+    greece: "gr",
+    turkey: "tr",
+    thailand: "th",
+    vietnam: "vn",
+    indonesia: "id",
+    philippines: "ph",
+    malaysia: "my",
+    singapore: "sg",
+    "south-korea": "kr",
+    pakistan: "pk",
+    "saudi-arabia": "sa",
+    "united-arab-emirates": "ae",
+    iran: "ir",
+    iraq: "iq",
+    ukraine: "ua",
+    poland: "pl",
+    "czech-republic": "cz",
+    hungary: "hu",
+    romania: "ro",
+    bulgaria: "bg",
+    croatia: "hr",
+    serbia: "rs",
+    slovenia: "si",
+    slovakia: "sk",
+    ireland: "ie",
+    iceland: "is",
+    luxembourg: "lu",
+    estonia: "ee",
+    latvia: "lv",
+    lithuania: "lt",
+    morocco: "ma",
+    algeria: "dz",
+    tunisia: "tn",
+    kenya: "ke",
+    ethiopia: "et",
+    ghana: "gh",
+    "ivory-coast": "ci",
+    senegal: "sn",
+    chile: "cl",
+    colombia: "co",
+    peru: "pe",
+    venezuela: "ve",
+    uruguay: "uy",
+    paraguay: "py",
+    bolivia: "bo",
+    ecuador: "ec",
+    panama: "pa",
+    "costa-rica": "cr",
+    cuba: "cu",
+    "dominican-republic": "do",
+    jamaica: "jm",
+    "trinidad-and-tobago": "tt",
+    qatar: "qa",
+    kuwait: "kw",
+    jordan: "jo",
+    lebanon: "lb",
+    syria: "sy",
+    afghanistan: "af",
+    bangladesh: "bd",
+    "sri-lanka": "lk",
+    nepal: "np",
+    myanmar: "mm",
+    cambodia: "kh",
+    mongolia: "mn",
+    kazakhstan: "kz",
+    uzbekistan: "uz",
+    georgia: "ge",
+    armenia: "am",
+    azerbaijan: "az",
+    belarus: "by",
+    moldova: "md",
+    macedonia: "mk",
+    albania: "al",
+    "bosnia-and-herzegovina": "ba",
+    malta: "mt",
+    cyprus: "cy",
+    andorra: "ad",
+    liechtenstein: "li",
+    monaco: "mc",
+    "san-marino": "sm",
+    dominica: "dm",
+    kiribati: "ki",
+    bhutan: "bt",
+    botswana: "bw",
+    brunei: "bn",
+    eswatini: "sz",
+    kyrgyzstan: "kg",
+    laos: "la",
+    madagascar: "mg",
+    mozambique: "mz",
+    namibia: "na",
+    tajikistan: "tj",
+    turkmenistan: "tm",
+  };
+
+  return isoBySlug[slug];
 }
 
 function shuffle(array) {
