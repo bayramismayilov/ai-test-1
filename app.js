@@ -14,19 +14,19 @@ const SPRITE_PROMPTS = [
     name: "Hero",
     file: "assets/player.svg",
     prompt:
-      "Pixel-art platformer hero, cute explorer with pink jacket and banana-yellow helmet, centered on solid #FF00FF background, 64x64, crisp edges, no transparency, single frame.",
+      "Pixel-art platformer hero resembling Donald Trump, expressive face, blond hair, blue suit, red tie, centered on solid #FF00FF background, 64x64, crisp edges, no transparency, single frame.",
   },
   {
-    name: "Dusk Bot",
+    name: "Hamburger Bot",
     file: "assets/bot.svg",
     prompt:
-      "Chibi robot enemy, teal body with dark visor and antenna bumps, centered on solid #FF00FF background, 64x64, no transparency, single frame.",
+      "Pixel-art hamburger enemy, layered bun, patty, lettuce, and cheese with tiny eyes, centered on solid #FF00FF background, 64x64, no transparency, single frame.",
   },
   {
-    name: "Banana Coin",
+    name: "Egg",
     file: "assets/coin.svg",
     prompt:
-      "Golden banana coin, simple pixel-art medallion with center slit, centered on solid #FF00FF background, 48x48, no transparency.",
+      "Pixel-art egg collectible, clean oval with light shading, centered on solid #FF00FF background, 48x48, no transparency.",
   },
   {
     name: "Finish Flag",
@@ -164,7 +164,7 @@ async function loadSprites() {
     ]);
     sprites = { player: playerSprite, bot: botSprite, coin: coinSprite, goal: goalSprite };
     state.spritesReady = true;
-    statusText.textContent = "Run! Collect every banana coin.";
+    statusText.textContent = "Run! Collect every egg.";
   } catch (error) {
     statusText.textContent = "Sprite load failed. Refresh to retry.";
   }
@@ -183,7 +183,7 @@ function resetGame() {
   coins.forEach((coin) => {
     coin.collected = false;
   });
-  statusText.textContent = "Run! Collect every banana coin.";
+  statusText.textContent = "Run! Collect every egg.";
 }
 
 function handleKeyDown(event) {
@@ -254,7 +254,7 @@ function attemptJump() {
   if (player.jumpsRemaining <= 0) return;
   player.vy = -player.jumpPower;
   player.jumpsRemaining -= 1;
-  statusText.textContent = player.jumpsRemaining === 1 ? "Double jump ready!" : "Run! Collect every banana coin.";
+  statusText.textContent = player.jumpsRemaining === 1 ? "Double jump ready!" : "Run! Collect every egg.";
 }
 
 function updatePlayer(dt) {
@@ -311,7 +311,7 @@ function updateCoins() {
     if (intersects(player, { x: coin.x, y: coin.y, width: 26, height: 26 })) {
       coin.collected = true;
       state.coinsCollected += 1;
-      statusText.textContent = state.coinsCollected === state.totalCoins ? "All coins secured! Reach the flag." : "Nice!";
+      statusText.textContent = state.coinsCollected === state.totalCoins ? "All eggs secured! Reach the flag." : "Nice!";
     }
   });
 }
@@ -327,7 +327,7 @@ function updateGoal() {
 function checkEnemyHits() {
   enemies.forEach((enemy) => {
     if (intersects(player, enemy)) {
-      loseLife("Hit by a dusk bot.");
+      loseLife("Hit by a hamburger bot.");
     }
   });
 }
