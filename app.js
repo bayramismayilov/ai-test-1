@@ -1,297 +1,341 @@
-const QUESTION_COUNT = 10;
-const QUESTION_TIME = 10;
-const AUTO_ADVANCE_DELAY_MS = 1200;
+const ROWS = 3;
+const COLS = 4;
 
-const ANIMAL_BANK = [
-  // Easy
+const ATTENDEES = [
   {
-    animal: "Elephant",
-    emoji: "🐘",
-    difficulty: "easy",
-    clue: "I am the largest land animal and I have a long trunk.",
+    id: "ava",
+    name: "Ava",
+    type: "person",
+    emoji: "🎟️",
+    tags: ["person"],
+    avoidTags: ["dog"],
+    problem: "Ava is allergic to dogs.",
   },
-  { animal: "Giraffe", emoji: "🦒", difficulty: "easy", clue: "I have a very long neck and eat leaves from tall trees." },
-  { animal: "Lion", emoji: "🦁", difficulty: "easy", clue: "I am called the king of the jungle and I roar loudly." },
-  { animal: "Penguin", emoji: "🐧", difficulty: "easy", clue: "I cannot fly, but I waddle and swim in icy waters." },
-  { animal: "Dolphin", emoji: "🐬", difficulty: "easy", clue: "I am a smart swimmer that loves to jump out of the ocean." },
-  { animal: "Panda", emoji: "🐼", difficulty: "easy", clue: "I am black and white and I love bamboo." },
-  { animal: "Kangaroo", emoji: "🦘", difficulty: "easy", clue: "I hop, and I carry my baby in a pouch." },
-  { animal: "Zebra", emoji: "🦓", difficulty: "easy", clue: "I look like a horse with bold black-and-white stripes." },
-  { animal: "Turtle", emoji: "🐢", difficulty: "easy", clue: "I move slowly and carry my shell on my back." },
-  { animal: "Bear", emoji: "🐻", difficulty: "easy", clue: "I am big and furry and I love honey." },
-  { animal: "Rabbit", emoji: "🐰", difficulty: "easy", clue: "I hop around and have long ears." },
-  { animal: "Frog", emoji: "🐸", difficulty: "easy", clue: "I leap and live near ponds, and I say ribbit." },
-
-  // Medium
-  { animal: "Octopus", emoji: "🐙", difficulty: "medium", clue: "I have eight arms and can squirt ink." },
-  { animal: "Rhinoceros", emoji: "🦏", difficulty: "medium", clue: "I am a strong animal with one or two horns on my nose." },
-  { animal: "Hippopotamus", emoji: "🦛", difficulty: "medium", clue: "I am huge and spend lots of time in rivers." },
-  { animal: "Flamingo", emoji: "🦩", difficulty: "medium", clue: "I stand on one leg and my feathers are pink." },
-  { animal: "Owl", emoji: "🦉", difficulty: "medium", clue: "I am a night bird with big eyes and a silent flight." },
-  { animal: "Chameleon", emoji: "🦎", difficulty: "medium", clue: "I can change my colors to blend in." },
-  { animal: "Walrus", emoji: "🦭", difficulty: "medium", clue: "I am a large sea mammal with long tusks." },
-  { animal: "Peacock", emoji: "🦚", difficulty: "medium", clue: "I show off a fan of colorful feathers." },
-  { animal: "Cobra", emoji: "🐍", difficulty: "medium", clue: "I am a snake that spreads a hood when I hiss." },
-  { animal: "Red Fox", emoji: "🦊", difficulty: "medium", clue: "I am clever with a bushy tail and orange fur." },
-  { animal: "Goat", emoji: "🐐", difficulty: "medium", clue: "I climb rocky places and have curved horns." },
-  { animal: "Moose", emoji: "🫎", difficulty: "medium", clue: "I am a large deer with wide antlers." },
-
-  // Hard
-  { animal: "Axolotl", emoji: "🦎", difficulty: "hard", clue: "I am a salamander that keeps my feathery gills." },
-  { animal: "Narwhal", emoji: "🦄", difficulty: "hard", clue: "I am a whale with a long, spiral tusk." },
-  { animal: "Okapi", emoji: "🦓", difficulty: "hard", clue: "I have zebra stripes on my legs and live in forests." },
-  { animal: "Quokka", emoji: "🐿️", difficulty: "hard", clue: "I am a small marsupial known for my smile." },
-  { animal: "Saiga", emoji: "🦌", difficulty: "hard", clue: "I have a big, unusual nose and live on the steppe." },
-  { animal: "Tapir", emoji: "🐗", difficulty: "hard", clue: "I have a short, trunk-like snout and love to swim." },
-  { animal: "Caracal", emoji: "🐱", difficulty: "hard", clue: "I am a wild cat with long black ear tufts." },
-  { animal: "Aye-aye", emoji: "🦝", difficulty: "hard", clue: "I have a long finger for finding insects in trees." },
-  { animal: "Binturong", emoji: "🦝", difficulty: "hard", clue: "I am also called a bearcat and smell like popcorn." },
-  { animal: "Fennec Fox", emoji: "🦊", difficulty: "hard", clue: "I am a desert fox with enormous ears." },
-  { animal: "Manatee", emoji: "🦭", difficulty: "hard", clue: "I am a gentle sea cow that grazes on plants." },
-  { animal: "Wombat", emoji: "🦫", difficulty: "hard", clue: "I am a sturdy marsupial that digs burrows." },
+  {
+    id: "ben",
+    name: "Ben",
+    type: "person",
+    emoji: "🍿",
+    tags: ["person"],
+    avoidTags: ["cat"],
+    problem: "Ben sneezes around cats.",
+  },
+  {
+    id: "chloe",
+    name: "Chloe",
+    type: "person",
+    emoji: "🎬",
+    tags: ["person"],
+    avoidTags: ["bird"],
+    problem: "Chloe is scared of birds.",
+  },
+  {
+    id: "diego",
+    name: "Diego",
+    type: "person",
+    emoji: "🥤",
+    tags: ["person"],
+    avoidTags: ["fox"],
+    problem: "Diego refuses to sit next to foxes.",
+  },
+  {
+    id: "ella",
+    name: "Ella",
+    type: "person",
+    emoji: "🎧",
+    tags: ["person"],
+    avoidTags: ["rabbit"],
+    problem: "Ella is allergic to rabbits.",
+  },
+  {
+    id: "finn",
+    name: "Finn",
+    type: "person",
+    emoji: "📽️",
+    tags: ["person"],
+    avoidTags: ["cat"],
+    problem: "Finn can't sit near cats.",
+  },
+  {
+    id: "rex",
+    name: "Rex",
+    type: "animal",
+    emoji: "🐶",
+    tags: ["animal", "dog"],
+    avoidTags: ["cat"],
+    problem: "Rex growls at cats.",
+  },
+  {
+    id: "mochi",
+    name: "Mochi",
+    type: "animal",
+    emoji: "🐱",
+    tags: ["animal", "cat"],
+    avoidTags: ["dog"],
+    problem: "Mochi won't sit next to dogs.",
+  },
+  {
+    id: "rio",
+    name: "Rio",
+    type: "animal",
+    emoji: "🦜",
+    tags: ["animal", "bird", "parrot"],
+    avoidTags: ["owl"],
+    problem: "Rio gets nervous next to owls.",
+  },
+  {
+    id: "thumper",
+    name: "Thumper",
+    type: "animal",
+    emoji: "🐰",
+    tags: ["animal", "rabbit"],
+    avoidTags: ["fox"],
+    problem: "Thumper avoids foxes.",
+  },
+  {
+    id: "nova",
+    name: "Nova",
+    type: "animal",
+    emoji: "🦊",
+    tags: ["animal", "fox"],
+    avoidTags: ["rabbit"],
+    problem: "Nova can't sit beside rabbits.",
+  },
+  {
+    id: "luma",
+    name: "Luma",
+    type: "animal",
+    emoji: "🦉",
+    tags: ["animal", "bird", "owl"],
+    avoidTags: ["parrot"],
+    problem: "Luma dislikes loud parrots.",
+  },
 ];
 
+const seatGrid = document.getElementById("seat-grid");
+const problemList = document.getElementById("problem-list");
+const statusMessage = document.getElementById("status-message");
+const conflictCount = document.getElementById("conflict-count");
+const newGameButton = document.getElementById("new-game");
+const checkButton = document.getElementById("check-seats");
+
 const state = {
-  difficulty: null,
-  questions: [],
-  index: 0,
-  score: 0,
-  questionStates: [],
-  timeLeft: QUESTION_TIME,
-  timerId: null,
-  autoAdvanceId: null,
+  seating: [],
+  selectedSeat: null,
 };
 
-const startScreen = document.getElementById("start-screen");
-const quizScreen = document.getElementById("quiz-screen");
-const resultScreen = document.getElementById("result-screen");
-const progressEl = document.getElementById("progress");
-const scoreEl = document.getElementById("score");
-const timerEl = document.getElementById("timer");
-const clueEmoji = document.getElementById("clue-emoji");
-const clueText = document.getElementById("clue-text");
-const optionsEl = document.getElementById("options");
-const statusMessage = document.getElementById("status-message");
-const showAnswerBtn = document.getElementById("show-answer-btn");
-const nextBtn = document.getElementById("next-btn");
-const finalScore = document.getElementById("final-score");
-const restartBtn = document.getElementById("restart-btn");
-
-document.querySelectorAll(".difficulty-btn").forEach((btn) => {
-  btn.addEventListener("click", () => startQuiz(btn.dataset.difficulty));
+newGameButton.addEventListener("click", () => {
+  buildNewGame();
+  statusMessage.textContent = "New seating generated. Swap any two seats to begin.";
 });
-showAnswerBtn.addEventListener("click", revealAnswer);
-nextBtn.addEventListener("click", goNext);
-restartBtn.addEventListener("click", resetToStart);
 
-function startQuiz(difficulty) {
-  const pool = ANIMAL_BANK.filter((item) => item.difficulty === difficulty);
-  if (pool.length < QUESTION_COUNT) {
-    alert(`Not enough ${difficulty} questions in local bank.`);
+checkButton.addEventListener("click", () => {
+  const conflicts = countConflicts(state.seating).total;
+  if (conflicts === 0) {
+    statusMessage.textContent = "Perfect! Everyone is happy with their neighbors.";
+    statusMessage.style.color = "var(--success)";
+  } else {
+    statusMessage.textContent = `There are still ${conflicts} conflicts to fix.`;
+    statusMessage.style.color = "var(--danger)";
+  }
+});
+
+function buildNewGame() {
+  const solution = generateValidSeating();
+  const scrambled = scrambleSeating(solution);
+
+  state.seating = scrambled;
+  state.selectedSeat = null;
+  renderProblems();
+  renderSeating();
+  updateConflicts();
+  statusMessage.style.color = "";
+}
+
+function renderProblems() {
+  problemList.innerHTML = "";
+  ATTENDEES.forEach((attendee) => {
+    const item = document.createElement("li");
+    item.innerHTML = `<strong>${attendee.name}:</strong> ${attendee.problem}`;
+    problemList.appendChild(item);
+  });
+}
+
+function renderSeating() {
+  seatGrid.innerHTML = "";
+  const conflicts = countConflicts(state.seating);
+
+  state.seating.forEach((attendee, index) => {
+    const seat = document.createElement("button");
+    seat.type = "button";
+    seat.className = "seat";
+    seat.dataset.index = index;
+
+    if (state.selectedSeat === index) {
+      seat.classList.add("selected");
+    }
+
+    if (conflicts.seatsWithConflicts.has(index)) {
+      seat.classList.add("violation");
+    }
+
+    seat.innerHTML = `
+      <span class="seat-label">${seatLabel(index)}</span>
+      <span class="seat-emoji">${attendee.emoji}</span>
+      <span class="seat-name">${attendee.name}</span>
+      <span class="seat-detail">${attendee.type}</span>
+    `;
+
+    seat.addEventListener("click", () => handleSeatClick(index));
+    seatGrid.appendChild(seat);
+  });
+}
+
+function handleSeatClick(index) {
+  if (state.selectedSeat === null) {
+    state.selectedSeat = index;
+    statusMessage.textContent = `Selected ${state.seating[index].name}. Choose a seat to swap.`;
+    renderSeating();
     return;
   }
 
-  state.difficulty = difficulty;
-  state.index = 0;
-  state.score = 0;
-  state.questions = shuffle([...pool]).slice(0, QUESTION_COUNT).map((q) => ({
-    ...q,
-    options: buildOptions(q, pool),
-  }));
-  state.questionStates = Array.from({ length: QUESTION_COUNT }, () => ({
-    selected: null,
-    locked: false,
-    revealed: false,
-    isCorrect: false,
-    timedOut: false,
-    status: "",
-  }));
+  if (state.selectedSeat === index) {
+    state.selectedSeat = null;
+    statusMessage.textContent = "Selection cleared. Pick another seat.";
+    renderSeating();
+    return;
+  }
 
-  startScreen.classList.add("hidden");
-  resultScreen.classList.add("hidden");
-  quizScreen.classList.remove("hidden");
-  state.timeLeft = QUESTION_TIME;
-  clearTimers();
-  renderQuestion();
-  startTimer();
+  swapSeats(state.selectedSeat, index);
+  const swappedNames = `${state.seating[index].name} ↔ ${state.seating[state.selectedSeat].name}`;
+  state.selectedSeat = null;
+  statusMessage.textContent = `Swapped seats: ${swappedNames}.`;
+  renderSeating();
+  updateConflicts();
 }
 
-function buildOptions(question, pool) {
-  const wrong = shuffle(pool.filter((item) => item.animal !== question.animal)).slice(0, 3);
-  return shuffle([question.animal, ...wrong.map((w) => w.animal)]);
+function swapSeats(indexA, indexB) {
+  const updated = [...state.seating];
+  [updated[indexA], updated[indexB]] = [updated[indexB], updated[indexA]];
+  state.seating = updated;
 }
 
-function renderQuestion() {
-  const question = state.questions[state.index];
-  const qState = state.questionStates[state.index];
+function seatLabel(index) {
+  const row = Math.floor(index / COLS);
+  const col = index % COLS;
+  return `Row ${String.fromCharCode(65 + row)} Seat ${col + 1}`;
+}
 
-  progressEl.textContent = `Question ${state.index + 1} / ${QUESTION_COUNT}`;
-  scoreEl.textContent = `Score: ${state.score} / ${QUESTION_COUNT}`;
-  timerEl.textContent = `Time: ${state.timeLeft}`;
-  statusMessage.textContent = qState.status || "";
+function generateValidSeating() {
+  const seats = Array(ROWS * COLS).fill(null);
+  const attendees = shuffle([...ATTENDEES]);
 
-  clueEmoji.textContent = question.emoji;
-  clueText.textContent = question.clue;
+  const success = backtrackPlace(attendees, seats, 0);
+  if (!success) {
+    throw new Error("Unable to generate a valid seating.");
+  }
 
-  optionsEl.innerHTML = "";
-  question.options.forEach((option) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "option-btn";
-    btn.textContent = option;
-    btn.disabled = qState.locked;
-    btn.addEventListener("click", () => chooseOption(option));
+  return seats;
+}
 
-    if (qState.selected === option) {
-      btn.classList.add("selected");
+function backtrackPlace(attendees, seats, index) {
+  if (index >= seats.length) {
+    return true;
+  }
+
+  const available = shuffle([...attendees]);
+  for (const attendee of available) {
+    if (!isSeatValid(attendee, index, seats)) {
+      continue;
     }
 
-    if (qState.locked) {
-      const correct = question.animal;
-      if (option === correct) {
-        btn.classList.add("correct");
-      } else if (qState.selected === option && !qState.isCorrect) {
-        btn.classList.add("incorrect");
+    seats[index] = attendee;
+    const remaining = attendees.filter((item) => item.id !== attendee.id);
+    if (backtrackPlace(remaining, seats, index + 1)) {
+      return true;
+    }
+    seats[index] = null;
+  }
+
+  return false;
+}
+
+function isSeatValid(attendee, index, seats) {
+  const neighbors = getNeighborIndices(index).map((neighborIndex) => seats[neighborIndex]);
+
+  for (const neighbor of neighbors) {
+    if (!neighbor) continue;
+    if (hasConflict(attendee, neighbor)) return false;
+    if (hasConflict(neighbor, attendee)) return false;
+  }
+
+  return true;
+}
+
+function hasConflict(attendee, neighbor) {
+  return attendee.avoidTags.some((tag) => neighbor.tags.includes(tag));
+}
+
+function getNeighborIndices(index) {
+  const row = Math.floor(index / COLS);
+  const col = index % COLS;
+  const neighbors = [];
+
+  if (row > 0) neighbors.push(index - COLS);
+  if (row < ROWS - 1) neighbors.push(index + COLS);
+  if (col > 0) neighbors.push(index - 1);
+  if (col < COLS - 1) neighbors.push(index + 1);
+
+  return neighbors;
+}
+
+function countConflicts(seating) {
+  const seatsWithConflicts = new Set();
+  let total = 0;
+
+  seating.forEach((attendee, index) => {
+    const neighbors = getNeighborIndices(index).map((neighborIndex) => seating[neighborIndex]);
+    neighbors.forEach((neighbor) => {
+      if (hasConflict(attendee, neighbor)) {
+        total += 1;
+        seatsWithConflicts.add(index);
       }
-    }
-
-    optionsEl.appendChild(btn);
+    });
   });
 
-  showAnswerBtn.disabled = qState.locked;
+  return { total, seatsWithConflicts };
 }
 
-function chooseOption(option) {
-  const question = state.questions[state.index];
-  const qState = state.questionStates[state.index];
-  if (qState.locked) return;
+function scrambleSeating(solution) {
+  let scrambled = shuffle([...solution]);
+  let attempts = 0;
 
-  qState.selected = option;
-  qState.locked = true;
-  qState.isCorrect = option === question.animal;
-  qState.status = qState.isCorrect ? "Correct!" : `Incorrect. It was ${question.animal}.`;
-
-  clearQuestionTimer();
-
-  if (qState.isCorrect) {
-    state.score += 1;
+  while (countConflicts(scrambled).total === 0 && attempts < 25) {
+    scrambled = shuffle([...solution]);
+    attempts += 1;
   }
 
-  renderQuestion();
-}
-
-function revealAnswer() {
-  const qState = state.questionStates[state.index];
-  if (qState.locked) return;
-
-  qState.revealed = true;
-  qState.locked = true;
-  qState.status = `Answer revealed: ${state.questions[state.index].animal}.`;
-  clearQuestionTimer();
-  renderQuestion();
-}
-
-function goNext() {
-  const qState = state.questionStates[state.index];
-  if (!qState.locked) {
-    statusMessage.textContent = "Pick an answer or reveal the answer first.";
-    return;
+  if (countConflicts(scrambled).total === 0) {
+    const fallback = [...solution];
+    [fallback[0], fallback[1]] = [fallback[1], fallback[0]];
+    return fallback;
   }
 
-  if (state.index === QUESTION_COUNT - 1) {
-    showResults();
-    return;
-  }
-
-  state.index += 1;
-  state.timeLeft = QUESTION_TIME;
-  clearTimers();
-  renderQuestion();
-  startTimer();
+  return scrambled;
 }
 
-function showResults() {
-  quizScreen.classList.add("hidden");
-  resultScreen.classList.remove("hidden");
-  clearTimers();
-  finalScore.textContent = `Great job! You guessed ${state.score} out of ${QUESTION_COUNT} animals.`;
+function updateConflicts() {
+  const conflicts = countConflicts(state.seating).total;
+  conflictCount.textContent = `Conflicts: ${conflicts}`;
 }
-
-function resetToStart() {
-  state.difficulty = null;
-  state.questions = [];
-  state.index = 0;
-  state.score = 0;
-  state.questionStates = [];
-  state.timeLeft = QUESTION_TIME;
-  clearTimers();
-  timerEl.textContent = `Time: ${QUESTION_TIME}`;
-  quizScreen.classList.add("hidden");
-  resultScreen.classList.add("hidden");
-  startScreen.classList.remove("hidden");
-}
-
-
-function startTimer() {
-  clearQuestionTimer();
-  state.timerId = setInterval(() => {
-    const qState = state.questionStates[state.index];
-    if (!qState || qState.locked) {
-      clearQuestionTimer();
-      return;
-    }
-
-    state.timeLeft = Math.max(0, state.timeLeft - 1);
-    timerEl.textContent = `Time: ${state.timeLeft}`;
-
-    if (state.timeLeft === 0) {
-      handleTimeout();
-    }
-  }, 1000);
-}
-
-function handleTimeout() {
-  const qState = state.questionStates[state.index];
-  if (!qState || qState.locked) return;
-
-  qState.locked = true;
-  qState.isCorrect = false;
-  qState.timedOut = true;
-  qState.status = `Time is up! It was ${state.questions[state.index].animal}.`;
-  clearQuestionTimer();
-  renderQuestion();
-
-  clearAutoAdvance();
-  state.autoAdvanceId = setTimeout(() => {
-    goNext();
-  }, AUTO_ADVANCE_DELAY_MS);
-}
-
-function clearQuestionTimer() {
-  if (state.timerId) {
-    clearInterval(state.timerId);
-    state.timerId = null;
-  }
-}
-
-function clearAutoAdvance() {
-  if (state.autoAdvanceId) {
-    clearTimeout(state.autoAdvanceId);
-    state.autoAdvanceId = null;
-  }
-}
-
-function clearTimers() {
-  clearQuestionTimer();
-  clearAutoAdvance();
-}
-
 
 function shuffle(array) {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i -= 1) {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+    [copy[i], copy[j]] = [copy[j], copy[i]];
   }
-  return arr;
+  return copy;
 }
+
+buildNewGame();
