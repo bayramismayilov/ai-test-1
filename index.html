@@ -3,40 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seat Swap Cinema Puzzle</title>
+    <title>Nano Banana Pro Platformer</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="app">
-      <header class="app-header">
-        <p class="eyebrow">Cinema Puzzle</p>
-        <h1>Seat Swap: Midnight at the Majestic</h1>
+    <main class="game-shell">
+      <header class="hero">
+        <p class="eyebrow">2D Platformer</p>
+        <h1>Banana Bounds: The Magenta Ruins</h1>
         <p class="subtitle">
-          The theater is full of people and animals. Swap seats until nobody is stuck next to a neighbor that
-          triggers their problem.
+          Dash, jump, and grab every banana coin before the dusk bots catch up. Built with sprites designed for
+          Nano Banana Pro (solid backgrounds keyed out in the engine).
         </p>
       </header>
 
-      <section class="card">
+      <section class="game-card">
+        <div class="hud">
+          <div>
+            <p class="hud-label">Status</p>
+            <p id="status-text" class="hud-value">Loading sprites…</p>
+          </div>
+          <div>
+            <p class="hud-label">Coins</p>
+            <p id="coin-count" class="hud-value">0 / 0</p>
+          </div>
+          <div>
+            <p class="hud-label">Lives</p>
+            <p id="life-count" class="hud-value">3</p>
+          </div>
+          <div>
+            <p class="hud-label">Timer</p>
+            <p id="timer" class="hud-value">0.0s</p>
+          </div>
+        </div>
+        <canvas id="game" width="960" height="540" aria-label="2D platformer game"></canvas>
         <div class="controls">
-          <button id="new-game" type="button">Generate New Seating</button>
-          <button id="check-seats" type="button">Check Seating</button>
-        </div>
-        <div class="status-bar">
-          <p id="status-message">Tap two seats to swap. Goal: zero conflicts.</p>
-          <p id="conflict-count">Conflicts: 0</p>
+          <div>
+            <h2>Controls</h2>
+            <ul>
+              <li><strong>Arrow / A-D</strong>: Move left &amp; right</li>
+              <li><strong>Space / W / Up</strong>: Jump (double jump unlocked)</li>
+              <li><strong>Shift</strong>: Sprint burst</li>
+            </ul>
+          </div>
+          <button id="restart" type="button">Restart Run</button>
         </div>
       </section>
 
-      <section class="layout">
-        <div class="screen">Screen</div>
-        <div id="seat-grid" class="seat-grid" aria-live="polite"></div>
-      </section>
-
-      <section class="card">
-        <h2>Seatmate Problems</h2>
-        <p class="subtitle">Everyone has a reason to avoid a specific neighbor.</p>
-        <ul id="problem-list" class="problem-list"></ul>
+      <section class="game-card">
+        <h2>Sprite Prompts (Nano Banana Pro)</h2>
+        <p class="subtitle">
+          These prompts were used to generate the sprites with solid magenta backgrounds. The game engine keys
+          out the background color during runtime.
+        </p>
+        <div id="prompt-grid" class="prompt-grid"></div>
       </section>
     </main>
 
