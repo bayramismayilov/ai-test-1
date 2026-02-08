@@ -110,22 +110,29 @@ button:active {
   font-weight: 700;
 }
 
-.flag-wrap {
+.clue-card {
   margin: 1rem auto;
   width: min(620px, 100%);
-  aspect-ratio: 16 / 10;
+  min-height: 180px;
   border: 1px solid rgba(65, 81, 156, 0.25);
   border-radius: 14px;
-  overflow: hidden;
   background: var(--surface);
   box-shadow: 0 8px 24px rgba(21, 30, 74, 0.18);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  gap: 0.5rem;
 }
 
-#flag-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+.clue-emoji {
+  font-size: 2.5rem;
+}
+
+.clue-text {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text);
 }
 
 .options-grid {

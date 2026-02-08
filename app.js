@@ -1,73 +1,54 @@
-const QUESTION_COUNT = 20;
-const QUESTION_TIME = 6;
+const QUESTION_COUNT = 10;
+const QUESTION_TIME = 10;
 const AUTO_ADVANCE_DELAY_MS = 1200;
 
-const FLAG_BANK = [
-  // Easy (20)
-  { country: "United States", slug: "united-states", difficulty: "easy" },
-  { country: "Canada", slug: "canada", difficulty: "easy" },
-  { country: "United Kingdom", slug: "united-kingdom", difficulty: "easy" },
-  { country: "France", slug: "france", difficulty: "easy" },
-  { country: "Germany", slug: "germany", difficulty: "easy" },
-  { country: "Italy", slug: "italy", difficulty: "easy" },
-  { country: "Spain", slug: "spain", difficulty: "easy" },
-  { country: "Portugal", slug: "portugal", difficulty: "easy" },
-  { country: "Brazil", slug: "brazil", difficulty: "easy" },
-  { country: "Argentina", slug: "argentina", difficulty: "easy" },
-  { country: "Mexico", slug: "mexico", difficulty: "easy" },
-  { country: "Japan", slug: "japan", difficulty: "easy" },
-  { country: "China", slug: "china", difficulty: "easy" },
-  { country: "India", slug: "india", difficulty: "easy" },
-  { country: "Australia", slug: "australia", difficulty: "easy" },
-  { country: "New Zealand", slug: "new-zealand", difficulty: "easy" },
-  { country: "South Korea", slug: "south-korea", difficulty: "easy" },
-  { country: "Russia", slug: "russia", difficulty: "easy" },
-  { country: "South Africa", slug: "south-africa", difficulty: "easy" },
-  { country: "Turkey", slug: "turkey", difficulty: "easy" },
+const ANIMAL_BANK = [
+  // Easy
+  {
+    animal: "Elephant",
+    emoji: "🐘",
+    difficulty: "easy",
+    clue: "I am the largest land animal and I have a long trunk.",
+  },
+  { animal: "Giraffe", emoji: "🦒", difficulty: "easy", clue: "I have a very long neck and eat leaves from tall trees." },
+  { animal: "Lion", emoji: "🦁", difficulty: "easy", clue: "I am called the king of the jungle and I roar loudly." },
+  { animal: "Penguin", emoji: "🐧", difficulty: "easy", clue: "I cannot fly, but I waddle and swim in icy waters." },
+  { animal: "Dolphin", emoji: "🐬", difficulty: "easy", clue: "I am a smart swimmer that loves to jump out of the ocean." },
+  { animal: "Panda", emoji: "🐼", difficulty: "easy", clue: "I am black and white and I love bamboo." },
+  { animal: "Kangaroo", emoji: "🦘", difficulty: "easy", clue: "I hop, and I carry my baby in a pouch." },
+  { animal: "Zebra", emoji: "🦓", difficulty: "easy", clue: "I look like a horse with bold black-and-white stripes." },
+  { animal: "Turtle", emoji: "🐢", difficulty: "easy", clue: "I move slowly and carry my shell on my back." },
+  { animal: "Bear", emoji: "🐻", difficulty: "easy", clue: "I am big and furry and I love honey." },
+  { animal: "Rabbit", emoji: "🐰", difficulty: "easy", clue: "I hop around and have long ears." },
+  { animal: "Frog", emoji: "🐸", difficulty: "easy", clue: "I leap and live near ponds, and I say ribbit." },
 
-  // Medium (20)
-  { country: "Poland", slug: "poland", difficulty: "medium" },
-  { country: "Sweden", slug: "sweden", difficulty: "medium" },
-  { country: "Norway", slug: "norway", difficulty: "medium" },
-  { country: "Denmark", slug: "denmark", difficulty: "medium" },
-  { country: "Finland", slug: "finland", difficulty: "medium" },
-  { country: "Greece", slug: "greece", difficulty: "medium" },
-  { country: "Netherlands", slug: "netherlands", difficulty: "medium" },
-  { country: "Belgium", slug: "belgium", difficulty: "medium" },
-  { country: "Switzerland", slug: "switzerland", difficulty: "medium" },
-  { country: "Austria", slug: "austria", difficulty: "medium" },
-  { country: "Ireland", slug: "ireland", difficulty: "medium" },
-  { country: "Ukraine", slug: "ukraine", difficulty: "medium" },
-  { country: "Romania", slug: "romania", difficulty: "medium" },
-  { country: "Thailand", slug: "thailand", difficulty: "medium" },
-  { country: "Vietnam", slug: "vietnam", difficulty: "medium" },
-  { country: "Indonesia", slug: "indonesia", difficulty: "medium" },
-  { country: "Saudi Arabia", slug: "saudi-arabia", difficulty: "medium" },
-  { country: "Egypt", slug: "egypt", difficulty: "medium" },
-  { country: "Nigeria", slug: "nigeria", difficulty: "medium" },
-  { country: "Kenya", slug: "kenya", difficulty: "medium" },
+  // Medium
+  { animal: "Octopus", emoji: "🐙", difficulty: "medium", clue: "I have eight arms and can squirt ink." },
+  { animal: "Rhinoceros", emoji: "🦏", difficulty: "medium", clue: "I am a strong animal with one or two horns on my nose." },
+  { animal: "Hippopotamus", emoji: "🦛", difficulty: "medium", clue: "I am huge and spend lots of time in rivers." },
+  { animal: "Flamingo", emoji: "🦩", difficulty: "medium", clue: "I stand on one leg and my feathers are pink." },
+  { animal: "Owl", emoji: "🦉", difficulty: "medium", clue: "I am a night bird with big eyes and a silent flight." },
+  { animal: "Chameleon", emoji: "🦎", difficulty: "medium", clue: "I can change my colors to blend in." },
+  { animal: "Walrus", emoji: "🦭", difficulty: "medium", clue: "I am a large sea mammal with long tusks." },
+  { animal: "Peacock", emoji: "🦚", difficulty: "medium", clue: "I show off a fan of colorful feathers." },
+  { animal: "Cobra", emoji: "🐍", difficulty: "medium", clue: "I am a snake that spreads a hood when I hiss." },
+  { animal: "Red Fox", emoji: "🦊", difficulty: "medium", clue: "I am clever with a bushy tail and orange fur." },
+  { animal: "Goat", emoji: "🐐", difficulty: "medium", clue: "I climb rocky places and have curved horns." },
+  { animal: "Moose", emoji: "🫎", difficulty: "medium", clue: "I am a large deer with wide antlers." },
 
-  // Hard (20)
-  { country: "Bhutan", slug: "bhutan", difficulty: "hard" },
-  { country: "Brunei", slug: "brunei", difficulty: "hard" },
-  { country: "Kyrgyzstan", slug: "kyrgyzstan", difficulty: "hard" },
-  { country: "Tajikistan", slug: "tajikistan", difficulty: "hard" },
-  { country: "Uzbekistan", slug: "uzbekistan", difficulty: "hard" },
-  { country: "Turkmenistan", slug: "turkmenistan", difficulty: "hard" },
-  { country: "Mongolia", slug: "mongolia", difficulty: "hard" },
-  { country: "Laos", slug: "laos", difficulty: "hard" },
-  { country: "Cambodia", slug: "cambodia", difficulty: "hard" },
-  { country: "Myanmar", slug: "myanmar", difficulty: "hard" },
-  { country: "Madagascar", slug: "madagascar", difficulty: "hard" },
-  { country: "Mozambique", slug: "mozambique", difficulty: "hard" },
-  { country: "Namibia", slug: "namibia", difficulty: "hard" },
-  { country: "Botswana", slug: "botswana", difficulty: "hard" },
-  { country: "Eswatini", slug: "eswatini", difficulty: "hard" },
-  { country: "Liechtenstein", slug: "liechtenstein", difficulty: "hard" },
-  { country: "Andorra", slug: "andorra", difficulty: "hard" },
-  { country: "San Marino", slug: "san-marino", difficulty: "hard" },
-  { country: "Dominica", slug: "dominica", difficulty: "hard" },
-  { country: "Kiribati", slug: "kiribati", difficulty: "hard" },
+  // Hard
+  { animal: "Axolotl", emoji: "🦎", difficulty: "hard", clue: "I am a salamander that keeps my feathery gills." },
+  { animal: "Narwhal", emoji: "🦄", difficulty: "hard", clue: "I am a whale with a long, spiral tusk." },
+  { animal: "Okapi", emoji: "🦓", difficulty: "hard", clue: "I have zebra stripes on my legs and live in forests." },
+  { animal: "Quokka", emoji: "🐿️", difficulty: "hard", clue: "I am a small marsupial known for my smile." },
+  { animal: "Saiga", emoji: "🦌", difficulty: "hard", clue: "I have a big, unusual nose and live on the steppe." },
+  { animal: "Tapir", emoji: "🐗", difficulty: "hard", clue: "I have a short, trunk-like snout and love to swim." },
+  { animal: "Caracal", emoji: "🐱", difficulty: "hard", clue: "I am a wild cat with long black ear tufts." },
+  { animal: "Aye-aye", emoji: "🦝", difficulty: "hard", clue: "I have a long finger for finding insects in trees." },
+  { animal: "Binturong", emoji: "🦝", difficulty: "hard", clue: "I am also called a bearcat and smell like popcorn." },
+  { animal: "Fennec Fox", emoji: "🦊", difficulty: "hard", clue: "I am a desert fox with enormous ears." },
+  { animal: "Manatee", emoji: "🦭", difficulty: "hard", clue: "I am a gentle sea cow that grazes on plants." },
+  { animal: "Wombat", emoji: "🦫", difficulty: "hard", clue: "I am a sturdy marsupial that digs burrows." },
 ];
 
 const state = {
@@ -87,7 +68,8 @@ const resultScreen = document.getElementById("result-screen");
 const progressEl = document.getElementById("progress");
 const scoreEl = document.getElementById("score");
 const timerEl = document.getElementById("timer");
-const flagImage = document.getElementById("flag-image");
+const clueEmoji = document.getElementById("clue-emoji");
+const clueText = document.getElementById("clue-text");
 const optionsEl = document.getElementById("options");
 const statusMessage = document.getElementById("status-message");
 const showAnswerBtn = document.getElementById("show-answer-btn");
@@ -103,7 +85,7 @@ nextBtn.addEventListener("click", goNext);
 restartBtn.addEventListener("click", resetToStart);
 
 function startQuiz(difficulty) {
-  const pool = FLAG_BANK.filter((item) => item.difficulty === difficulty);
+  const pool = ANIMAL_BANK.filter((item) => item.difficulty === difficulty);
   if (pool.length < QUESTION_COUNT) {
     alert(`Not enough ${difficulty} questions in local bank.`);
     return;
@@ -135,8 +117,8 @@ function startQuiz(difficulty) {
 }
 
 function buildOptions(question, pool) {
-  const wrong = shuffle(pool.filter((item) => item.country !== question.country)).slice(0, 3);
-  return shuffle([question.country, ...wrong.map((w) => w.country)]);
+  const wrong = shuffle(pool.filter((item) => item.animal !== question.animal)).slice(0, 3);
+  return shuffle([question.animal, ...wrong.map((w) => w.animal)]);
 }
 
 function renderQuestion() {
@@ -148,8 +130,8 @@ function renderQuestion() {
   timerEl.textContent = `Time: ${state.timeLeft}`;
   statusMessage.textContent = qState.status || "";
 
-  flagImage.alt = `Flag of ${question.country}`;
-  loadFlagImage(question);
+  clueEmoji.textContent = question.emoji;
+  clueText.textContent = question.clue;
 
   optionsEl.innerHTML = "";
   question.options.forEach((option) => {
@@ -165,7 +147,7 @@ function renderQuestion() {
     }
 
     if (qState.locked) {
-      const correct = question.country;
+      const correct = question.animal;
       if (option === correct) {
         btn.classList.add("correct");
       } else if (qState.selected === option && !qState.isCorrect) {
@@ -186,8 +168,8 @@ function chooseOption(option) {
 
   qState.selected = option;
   qState.locked = true;
-  qState.isCorrect = option === question.country;
-  qState.status = qState.isCorrect ? "Correct!" : "Incorrect.";
+  qState.isCorrect = option === question.animal;
+  qState.status = qState.isCorrect ? "Correct!" : `Incorrect. It was ${question.animal}.`;
 
   clearQuestionTimer();
 
@@ -204,7 +186,7 @@ function revealAnswer() {
 
   qState.revealed = true;
   qState.locked = true;
-  qState.status = "Answer revealed for this question.";
+  qState.status = `Answer revealed: ${state.questions[state.index].animal}.`;
   clearQuestionTimer();
   renderQuestion();
 }
@@ -232,7 +214,7 @@ function showResults() {
   quizScreen.classList.add("hidden");
   resultScreen.classList.remove("hidden");
   clearTimers();
-  finalScore.textContent = `Congrats! You got ${state.score}/${QUESTION_COUNT}. Uncle Bayram is proud of you!`;
+  finalScore.textContent = `Great job! You guessed ${state.score} out of ${QUESTION_COUNT} animals.`;
 }
 
 function resetToStart() {
@@ -275,7 +257,7 @@ function handleTimeout() {
   qState.locked = true;
   qState.isCorrect = false;
   qState.timedOut = true;
-  qState.status = "Time is up!";
+  qState.status = `Time is up! It was ${state.questions[state.index].animal}.`;
   clearQuestionTimer();
   renderQuestion();
 
@@ -304,152 +286,6 @@ function clearTimers() {
   clearAutoAdvance();
 }
 
-function loadFlagImage(question) {
-  const sources = [
-    `assets/flags/${question.slug}.png`,
-    `https://flagcdn.com/w640/${getIsoCode(question.slug)}.png`,
-  ];
-
-  let sourceIndex = 0;
-  flagImage.src = sources[sourceIndex];
-  flagImage.onerror = () => {
-    sourceIndex += 1;
-    if (sourceIndex < sources.length && !sources[sourceIndex].includes("undefined")) {
-      flagImage.src = sources[sourceIndex];
-      return;
-    }
-    flagImage.onerror = null;
-    flagImage.src = createPlaceholder(question.country);
-  };
-}
-
-function getIsoCode(slug) {
-  const isoBySlug = {
-    "united-states": "us",
-    canada: "ca",
-    "united-kingdom": "gb",
-    france: "fr",
-    germany: "de",
-    italy: "it",
-    spain: "es",
-    portugal: "pt",
-    brazil: "br",
-    argentina: "ar",
-    mexico: "mx",
-    japan: "jp",
-    china: "cn",
-    india: "in",
-    australia: "au",
-    "new-zealand": "nz",
-    russia: "ru",
-    "south-africa": "za",
-    egypt: "eg",
-    nigeria: "ng",
-    sweden: "se",
-    norway: "no",
-    finland: "fi",
-    denmark: "dk",
-    netherlands: "nl",
-    belgium: "be",
-    switzerland: "ch",
-    austria: "at",
-    greece: "gr",
-    turkey: "tr",
-    thailand: "th",
-    vietnam: "vn",
-    indonesia: "id",
-    philippines: "ph",
-    malaysia: "my",
-    singapore: "sg",
-    "south-korea": "kr",
-    pakistan: "pk",
-    "saudi-arabia": "sa",
-    "united-arab-emirates": "ae",
-    iran: "ir",
-    iraq: "iq",
-    ukraine: "ua",
-    poland: "pl",
-    "czech-republic": "cz",
-    hungary: "hu",
-    romania: "ro",
-    bulgaria: "bg",
-    croatia: "hr",
-    serbia: "rs",
-    slovenia: "si",
-    slovakia: "sk",
-    ireland: "ie",
-    iceland: "is",
-    luxembourg: "lu",
-    estonia: "ee",
-    latvia: "lv",
-    lithuania: "lt",
-    morocco: "ma",
-    algeria: "dz",
-    tunisia: "tn",
-    kenya: "ke",
-    ethiopia: "et",
-    ghana: "gh",
-    "ivory-coast": "ci",
-    senegal: "sn",
-    chile: "cl",
-    colombia: "co",
-    peru: "pe",
-    venezuela: "ve",
-    uruguay: "uy",
-    paraguay: "py",
-    bolivia: "bo",
-    ecuador: "ec",
-    panama: "pa",
-    "costa-rica": "cr",
-    cuba: "cu",
-    "dominican-republic": "do",
-    jamaica: "jm",
-    "trinidad-and-tobago": "tt",
-    qatar: "qa",
-    kuwait: "kw",
-    jordan: "jo",
-    lebanon: "lb",
-    syria: "sy",
-    afghanistan: "af",
-    bangladesh: "bd",
-    "sri-lanka": "lk",
-    nepal: "np",
-    myanmar: "mm",
-    cambodia: "kh",
-    mongolia: "mn",
-    kazakhstan: "kz",
-    uzbekistan: "uz",
-    georgia: "ge",
-    armenia: "am",
-    azerbaijan: "az",
-    belarus: "by",
-    moldova: "md",
-    macedonia: "mk",
-    albania: "al",
-    "bosnia-and-herzegovina": "ba",
-    malta: "mt",
-    cyprus: "cy",
-    andorra: "ad",
-    liechtenstein: "li",
-    monaco: "mc",
-    "san-marino": "sm",
-    dominica: "dm",
-    kiribati: "ki",
-    bhutan: "bt",
-    botswana: "bw",
-    brunei: "bn",
-    eswatini: "sz",
-    kyrgyzstan: "kg",
-    laos: "la",
-    madagascar: "mg",
-    mozambique: "mz",
-    namibia: "na",
-    tajikistan: "tj",
-    turkmenistan: "tm",
-  };
-
-  return isoBySlug[slug];
-}
 
 function shuffle(array) {
   const arr = [...array];
@@ -458,22 +294,4 @@ function shuffle(array) {
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
-}
-
-function createPlaceholder(country) {
-  const hue = Math.abs(
-    [...country].reduce((acc, ch) => acc + ch.charCodeAt(0), 0) % 360
-  );
-  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500'>
-    <defs>
-      <linearGradient id='g' x1='0' x2='1'>
-        <stop offset='0%' stop-color='hsl(${hue},70%,45%)'/>
-        <stop offset='100%' stop-color='hsl(${(hue + 60) % 360},75%,55%)'/>
-      </linearGradient>
-    </defs>
-    <rect width='100%' height='100%' fill='url(#g)'/>
-    <rect x='30' y='30' width='740' height='440' rx='24' fill='rgba(255,255,255,0.2)'/>
-    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='48' fill='white' font-family='Arial, sans-serif'>${country}</text>
-  </svg>`;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
