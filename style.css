@@ -19,7 +19,9 @@
 
 body {
   font-family: "Inter", "Segoe UI", sans-serif;
-  background: radial-gradient(circle at top, #26284f 0%, var(--bg) 55%);
+  background: linear-gradient(rgba(15, 16, 37, 0.85), rgba(15, 16, 37, 0.92)),
+    url("https://images.unsplash.com/photo-1517602302552-471fe67acf66?auto=format&fit=crop&w=2400&q=80")
+      center / cover no-repeat fixed;
   color: var(--text);
   min-height: 100vh;
   display: flex;
